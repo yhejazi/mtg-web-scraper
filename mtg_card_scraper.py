@@ -9,7 +9,8 @@ import pandas as pd
 def convertSymbol(imgAlt):
     ''' 
     Coverts a card symbol image to its corresponding text -
-    Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap
+    Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, 
+    E = Energy
     '''   
     if (imgAlt == "Variable Colorless"):
         return('X')
@@ -17,13 +18,14 @@ def convertSymbol(imgAlt):
         return('U')
     elif (imgAlt == "Tap"):
         return('Tap')
-    else:
-        return(imgAlt[0])
+    elif (imgAlt.isnumeric()): # number can be multiple digits
+        return(imgAlt)
+    return(imgAlt[0])
 
 
 if __name__ == '__main__':
     # Determine total number of pages
-    page = r.get("http://gatherer.wizards.com/Pages/Search/Default.aspx?page=0&color=|[W]|[U]|[B]|[R]|[G]")
+    page = r.get("https://gatherer.wizards.com/Pages/Search/Default.aspx?page=0&name=+[%22%22]")
     soup = bs(page.content, 'html.parser')
     termDisplay = soup.find("p", attrs={"class": "termdisplay"}).text.strip()
     totalCards = re.search(r'(\d+)', termDisplay).group()
@@ -34,7 +36,7 @@ if __name__ == '__main__':
     cardlist = []
 
     for pageNum in range(totalPages): # change back to totalPages
-        page = r.get("http://gatherer.wizards.com/Pages/Search/Default.aspx?page={0}&color=|[W]|[U]|[B]|[R]|[G]".format(pageNum))
+        page = r.get("https://gatherer.wizards.com/Pages/Search/Default.aspx?page={0}&name=+[%22%22]".format(pageNum))
         soup = bs(page.content, 'html.parser')
         cardItem = soup("tr", attrs={"class": "cardItem"})
 
