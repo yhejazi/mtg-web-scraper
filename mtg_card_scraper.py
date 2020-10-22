@@ -118,7 +118,7 @@ if __name__ == '__main__':
     columnNames = ['cardName', 'superType', 'cardType', 'subType', 'typeNum', 'manaCost', 'convertedMana', 'cardSet', 'rarity', 'rules']
     df = pd.DataFrame(cardlist, columns=columnNames)
 
-    df.to_csv(path_or_buf='output.csv', index = False)
+    df.to_csv(path_or_buf='data/output.csv', index = False)
 
 
 
