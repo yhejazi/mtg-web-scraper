@@ -22,6 +22,19 @@ def convertSymbol(imgAlt):
         return(imgAlt)
     return(imgAlt[0])
 
+def getSuperType(cardType, superType):
+    ''' '''
+    if any(supertype in cardType for supertype in supertypes):
+        typeSplit = cardType.split()
+        superType = (superType + ' ' + typeSplit[0]).strip()
+        cardType = ' '.join(typeSplit[1:])
+        # check again, there could be two supertypes
+        if any(supertype in cardType for supertype in supertypes):
+            typeSplit = cardType.split()
+            superType = (superType + ' ' + typeSplit[0]).strip()
+            cardType = ' '.join(typeSplit[1:])
+    return(cardType, superType)
+
 
 if __name__ == '__main__':
     # Determine total number of pages
@@ -35,7 +48,7 @@ if __name__ == '__main__':
 
     cardlist = []
 
-    for pageNum in range(totalPages): # change back to totalPages
+    for pageNum in range(totalPages):
         page = r.get("https://gatherer.wizards.com/Pages/Search/Default.aspx?page={0}&name=+[%22%22]".format(pageNum))
         soup = bs(page.content, 'html.parser')
         cardItem = soup("tr", attrs={"class": "cardItem"})
@@ -61,13 +74,8 @@ if __name__ == '__main__':
 
             # Divide type~supertype
             supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World']
-            superType = 'NA'
-
-            if any(supertype in cardType for supertype in supertypes):
-                typeSplit = cardType.split()
-                superType = typeSplit[0]
-                cardType = ' '.join(typeSplit[1:])
-
+            superType = ''
+            cardType, superType = getSuperType(cardType, superType)
 
             convertedMana = card.findNext("span", {"class": "convertedManaCost"}).text.strip()
 
