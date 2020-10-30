@@ -29,3 +29,21 @@ def getSuperType(cardType, superType, supertypes):
             superType = (superType + ' ' + typeSplit[0]).strip()
             cardType = ' '.join(typeSplit[1:])
     return(cardType, superType)
+
+def cleanUp(df):
+    '''
+    Remove rows that have values for rarity, card type, etc. that go beyond MtG boundaries
+    '''
+    rarityValues = ['Mythic Rare', 'Rare', 'Uncommon', 'Common', 'Special']
+
+
+    df = df[df['rarity'].isin(rarityValues)]
+    return df
+
+def splitSetAndRarity(setAndRarity):
+    '''
+    '''
+    srSplit = setAndRarity.split("(")
+    cardSet = srSplit[0].strip()
+    rarity = srSplit[-1].strip(') ')
+    return cardSet, rarity

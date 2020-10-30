@@ -69,17 +69,18 @@ if __name__ == '__main__':
             manaCost = ''.join(manaCostList)
 
             # Get card set and rarity from right column
-            setAndRarity = card.findNext("td", {"class": "setVersions"}).find('img', alt=True)
-            cardSet = re.search(r'^.+?(?=\s\()', setAndRarity['alt'])[0]
-            rarity = re.search(r'(?<=\().+?(?=\))', setAndRarity['alt'])[0]
+            setAndRarity = card.findNext("td", {"class": "setVersions"}).find('img', alt=True)['alt']
+            # cardSet = re.search(r'^.+?(?=\s\()', setAndRarity['alt'])[0]
+            # rarity = re.search(r'(?<=\().+?(?=\))', setAndRarity['alt'])[0]
+            cardSet, rarity = splitSetAndRarity(setAndRarity)
+
 
             # If the card has other sets (reprints)...
             if (card.findNext("div", {"class": "otherSetSection"})):
                 otherSets = card.findNext("div", {"class": "otherSetSection"}).findAll('img', alt=True)
                 # append reprints to cardlist as their own row
                 for extraSet in otherSets:
-                    extraCardSet = re.search(r'^.+?(?=\s\()', extraSet['alt'])[0]
-                    extraRarity = re.search(r'(?<=\().+?(?=\))', extraSet['alt'])[0]
+                    extraCardSet, extraRarity = splitSetAndRarity(extraSet['alt'])
                     cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, extraCardSet, extraRarity, rules])
 
             cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, cardSet, rarity, rules])
