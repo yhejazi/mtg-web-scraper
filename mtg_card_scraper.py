@@ -47,6 +47,7 @@ if __name__ == '__main__':
             supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World']
             superType = ''
             cardType, superType = getSuperType(cardType, superType, supertypes)
+            cardType, superType = getSuperType(cardType, superType, supertypes) # check again, can have 2 supertypes
 
             convertedMana = card.findNext("span", {"class": "convertedManaCost"}).text.strip()
 
@@ -70,18 +71,17 @@ if __name__ == '__main__':
 
             # Get card set and rarity from right column
             setAndRarity = card.findNext("td", {"class": "setVersions"}).find('img', alt=True)['alt']
-            # cardSet = re.search(r'^.+?(?=\s\()', setAndRarity['alt'])[0]
-            # rarity = re.search(r'(?<=\().+?(?=\))', setAndRarity['alt'])[0]
             cardSet, rarity = splitSetAndRarity(setAndRarity)
 
 
-            # If the card has other sets (reprints)...
-            if (card.findNext("div", {"class": "otherSetSection"})):
-                otherSets = card.findNext("div", {"class": "otherSetSection"}).findAll('img', alt=True)
+            ###### If the card has other sets (reprints)... ######
+            if (card.findChild("div", {"class": "otherSetSection"})):
+                otherSets = card.findChild("div", {"class": "otherSetSection"}).findAll('img', alt=True)
                 # append reprints to cardlist as their own row
                 for extraSet in otherSets:
                     extraCardSet, extraRarity = splitSetAndRarity(extraSet['alt'])
                     cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, extraCardSet, extraRarity, rules])
+            ###### End of extra sets ######
 
             cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, cardSet, rarity, rules])
 
