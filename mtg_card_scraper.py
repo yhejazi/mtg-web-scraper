@@ -34,13 +34,15 @@ if __name__ == '__main__':
             subType = 'NA' #np.NaN
             typeNum = 'NA'
             # If there is a dash (subtype)
-            if re.search(r'.+?(?=\s+—)', cardType):
-                # if there is power/toughness or loyalty...
-                if re.search(r'(?<=\().+?(?=\))', cardType):
-                    typeNum = re.search(r'(?<=\().+?(?=\))', cardType)[0]
+            typeSplit = cardType.split('—')
+            cardType = typeSplit[0].strip()
 
-                subType = re.search(r'(?<=—\s)([^\\]+)', cardType)[0]
-                cardType = re.search(r'.+?(?=\s+—)', cardType)[0]
+            if len(typeSplit) > 1:
+                subTypeSplit = typeSplit[-1].split('(')
+                subType = subTypeSplit[0].strip()
+                # if there is power/toughness or loyalty...
+                if len(subTypeSplit) > 1:
+                    typeNum = subTypeSplit[-1].strip(') ')
                 
 
             # Divide type~supertype

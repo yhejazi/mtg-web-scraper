@@ -28,7 +28,7 @@ def getSuperType(cardType, superType, supertypes):
 
 def cleanUp(df):
     '''
-    Provide cleanup
+    Minor cleaning on the dataset
     '''
     df['rarity'] = df['rarity'].replace(['Land'],'Common')
 
