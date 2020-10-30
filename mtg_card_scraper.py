@@ -1,39 +1,10 @@
-# import pyodbc
 import requests as r
 from bs4 import BeautifulSoup as bs
 import re
 from math import ceil
 import numpy as np
 import pandas as pd
-
-def convertSymbol(imgAlt):
-    ''' 
-    Coverts a card symbol image to its corresponding text -
-    Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, 
-    E = Energy
-    '''   
-    if (imgAlt == "Variable Colorless"):
-        return('X')
-    elif (imgAlt == "Blue"):
-        return('U')
-    elif (imgAlt == "Tap"):
-        return('Tap')
-    elif (imgAlt.isnumeric()): # number can be multiple digits
-        return(imgAlt)
-    return(imgAlt[0])
-
-def getSuperType(cardType, superType):
-    ''' '''
-    if any(supertype in cardType for supertype in supertypes):
-        typeSplit = cardType.split()
-        superType = (superType + ' ' + typeSplit[0]).strip()
-        cardType = ' '.join(typeSplit[1:])
-        # check again, there could be two supertypes
-        if any(supertype in cardType for supertype in supertypes):
-            typeSplit = cardType.split()
-            superType = (superType + ' ' + typeSplit[0]).strip()
-            cardType = ' '.join(typeSplit[1:])
-    return(cardType, superType)
+from helper import *
 
 
 if __name__ == '__main__':
@@ -75,7 +46,7 @@ if __name__ == '__main__':
             # Divide type~supertype
             supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World']
             superType = ''
-            cardType, superType = getSuperType(cardType, superType)
+            cardType, superType = getSuperType(cardType, superType, supertypes)
 
             convertedMana = card.findNext("span", {"class": "convertedManaCost"}).text.strip()
 
@@ -119,38 +90,3 @@ if __name__ == '__main__':
     df = pd.DataFrame(cardlist, columns=columnNames)
 
     df.to_csv(path_or_buf='data/output.csv', index = False)
-
-
-
-    ##### Upload data to sql database #####
-
-    # print("Connecting to database")
-    # mydb = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=is-info430.ischool.uw.edu;DATABASE=Lab2;UID=INFO430;PWD=wubalubadubdub')
-    # print("Done connecting")
-    # cursor = mydb.cursor()
-    
-    # # insert data into our database
-    # insertCard = """
-    # SET NOCOUNT ON; 
-    # EXECUTE [INFO430].[insert_yhejazi]
-    # @cardName = ?, 
-    # @cardType = ?,
-    # @mana = ?,
-    # @convertedMana = ?,
-    # @cardSet = ?,
-    # @rarity = ?,
-    # @rules = ?
-    # """
-
-    # print("Starting import...")
-
-    # for card in cardlist:
-    #     cursor.execute(insertCard, card)
-    
-    # #commit your transaction when finished
-    # cursor.commit()
-    # #close the connection and cursor
-    # cursor.close()
-    # mydb.close()
-
-    # print("Import completed.")
