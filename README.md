@@ -23,4 +23,5 @@ Rarities: 'Common', 'Uncommon', 'Rare', 'Mythic Rare', 'Special', 'Promo'
 
 ## Notes:
 - Land cards with the rarity "Land" were changed to have the rarity "Common" to keep consistent with other sets.
+- Removed token cards where cardType contains 'Token'
 
