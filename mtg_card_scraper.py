@@ -27,23 +27,19 @@ if __name__ == '__main__':
         print("Scraping page {0}".format(pageNum))
 
         for card in cardItem:
-            cardTitle = card.findNext("span", {"class": "cardTitle"}).text.strip()
-            
+            cardName = card.findNext("span", {"class": "cardTitle"}).text.strip()           
             cardType = card.findNext("span", {"class": "typeLine"}).text.strip()
+
             # Divide type~subtype
             subType = 'NA' #np.NaN
             typeNum = 'NA'
-            # If there is a dash (subtype)
-            typeSplit = cardType.split('—')
-            cardType = typeSplit[0].strip()
 
-            if len(typeSplit) > 1:
-                subTypeSplit = typeSplit[-1].split('(')
-                subType = subTypeSplit[0].strip()
-                # if there is power/toughness or loyalty...
-                if len(subTypeSplit) > 1:
-                    typeNum = subTypeSplit[-1].strip(') ')
-                
+
+            m = re.search(r'([\w ]+)[\s—]*([\w ]+)?[\s]*(?:\(([\d\*/]+)\))?', cardType)
+            if m:
+                cardType = m.group(1).strip()
+                subType = m.group(2)
+                typeNum = m.group(3)             
 
             # Divide type~supertype
             supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World']
@@ -82,14 +78,15 @@ if __name__ == '__main__':
                 # append reprints to cardlist as their own row
                 for extraSet in otherSets:
                     extraCardSet, extraRarity = splitSetAndRarity(extraSet['alt'])
-                    cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, extraCardSet, extraRarity, rules])
+                    cardlist.append([cardName, superType, cardType, subType, typeNum, manaCost, convertedMana, extraCardSet, extraRarity, rules])
             ###### End of extra sets ######
 
-            cardlist.append([cardTitle, superType, cardType, subType, typeNum, manaCost, convertedMana, cardSet, rarity, rules])
+            cardlist.append([cardName, superType, cardType, subType, typeNum, manaCost, convertedMana, cardSet, rarity, rules])
 
 
     
     columnNames = ['cardName', 'superType', 'cardType', 'subType', 'typeNum', 'manaCost', 'convertedMana', 'cardSet', 'rarity', 'rules']
     df = pd.DataFrame(cardlist, columns=columnNames)
+    cleanUp(df)
 
     df.to_csv(path_or_buf='data/output.csv', index = False)

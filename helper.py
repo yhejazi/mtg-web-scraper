@@ -28,9 +28,13 @@ def getSuperType(cardType, superType, supertypes):
 
 def cleanUp(df):
     '''
-    Minor cleaning on the dataset
+    Minor cleaning on the dataset, handling edge cases/test card anomalies
     '''
     df['rarity'] = df['rarity'].replace(['Land'],'Common')
+    df['cardType'] = df['cardType'].replace(['instant'],'Instant')
+    df['cardType'] = df['cardType'].replace(['Eaturecray'],'Creature')
+    df['cardType'] = df['cardType'].replace(['Scariest Creature You'],'Creature')
+    df['subType'] = df['subType'].replace(['Igpay'],'Pig')
 
 def splitSetAndRarity(setAndRarity):
     '''
