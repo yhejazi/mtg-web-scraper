@@ -1,3 +1,12 @@
+def cleanUp(df):
+    '''
+    Minor cleaning on the dataset, handling edge cases/test card anomalies
+    '''
+    df['rarity'] = df['rarity'].replace(['Land'],'Common')
+    df['cardType'] = df['cardType'].replace(['instant'],'Instant')
+    df['cardType'] = df['cardType'].replace(['Eaturecray', 'Scariest Creature You'],'Creature')
+    df['subType'] = df['subType'].replace(['Igpay'],'Pig')
+    df = df[~df.cardType.str.contains("Token", na=False)] # fix code so this applies
 
 def convertSymbol(imgAlt):
     ''' 
@@ -15,6 +24,16 @@ def convertSymbol(imgAlt):
         return(imgAlt)
     return(imgAlt[0])
 
+def formatRules(rules):
+    for p in rules:
+        # Convert rule symbols to text
+        for image in p.findAll("img"):
+            convertedAlt = convertSymbol(image['alt'])
+            image.replaceWith(convertedAlt)
+        index = rules.index(p)
+        rules[index] = p.text.strip()  
+    return("\n".join(rules))
+
 def getSuperType(cardType, superType, supertypes):
     '''
     Splits cardType string into card type and supertype; returns those values
@@ -26,15 +45,6 @@ def getSuperType(cardType, superType, supertypes):
         
     return(cardType, superType)
 
-def cleanUp(df):
-    '''
-    Minor cleaning on the dataset, handling edge cases/test card anomalies
-    '''
-    df['rarity'] = df['rarity'].replace(['Land'],'Common')
-    df['cardType'] = df['cardType'].replace(['instant'],'Instant')
-    df['cardType'] = df['cardType'].replace(['Eaturecray'],'Creature')
-    df['cardType'] = df['cardType'].replace(['Scariest Creature You'],'Creature')
-    df['subType'] = df['subType'].replace(['Igpay'],'Pig')
 
 def splitSetAndRarity(setAndRarity):
     '''
