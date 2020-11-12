@@ -24,4 +24,5 @@ Rarities: 'Common', 'Uncommon', 'Rare', 'Mythic Rare', 'Special', 'Promo'
 ## Notes:
 - Land cards with the rarity "Land" were changed to have the rarity "Common" to keep consistent with other sets.
 - Removed token cards where cardType contains 'Token'
+- Card type ['Summon'](https://boardgames.stackexchange.com/questions/6715/are-summon-insert-creature-type-here-cards-creatures) was changed to 'Creature'
 
