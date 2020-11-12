@@ -1,6 +1,6 @@
 # Magic: The Gathering Web Scraper
 
-This is a web scraper that collects data of all Magic: The Gathering cards on Wizards of the Coast's [Gatherer website](https://gatherer.wizards.com/Pages/Search/Default.aspx?page=0&color=|[W]|[U]|[B]|[R]|[G])
+This is a web scraper that collects data of all Magic: The Gathering cards on [Wizards of the Coast's Gatherer website](https://gatherer.wizards.com/Pages/Search/Default.aspx?page=0&color=|[W]|[U]|[B]|[R]|[G])
 
 ## About the data
 The Gatherer website is a database of every Magic: The Gathering card, including test cards. I scraped the data to include the following variables:
@@ -24,5 +24,5 @@ Rarities: 'Common', 'Uncommon', 'Rare', 'Mythic Rare', 'Special', 'Promo'
 ## Notes:
 - Land cards with the rarity "Land" were changed to have the rarity "Common" to keep consistent with other sets.
 - Removed token cards where cardType contains 'Token'
-- Card type ['Summon'](https://boardgames.stackexchange.com/questions/6715/are-summon-insert-creature-type-here-cards-creatures) was changed to 'Creature'
+- Card type '[Summon](https://boardgames.stackexchange.com/questions/6715/are-summon-insert-creature-type-here-cards-creatures)' was changed to 'Creature'
 
