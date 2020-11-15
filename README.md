@@ -15,7 +15,7 @@ The Gatherer website is a database of every Magic: The Gathering card, including
 - **rarity**: The rarity of a card; string
 - **rules**: The rules (text) of a card. Symbols converted using color code; string
 
-Supertypes: 'Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World'
+Supertypes (defined [here](https://mtg.fandom.com/wiki/Supertype) ): 'Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'World'
 
 Mana Cost Key: Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, E = Energy
 

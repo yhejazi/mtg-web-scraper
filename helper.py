@@ -3,10 +3,11 @@ def cleanUp(df):
     Minor cleaning on the dataset, handling edge cases/test card anomalies
     '''
     df['rarity'] = df['rarity'].replace(['Land'],'Common')
-    df['cardType'] = df['cardType'].replace(['instant'],'Instant')
-    df['cardType'] = df['cardType'].replace(['Eaturecray', 'Scariest Creature You'],'Creature')
+    df['cardType'] = df['cardType'].replace(['instant', 'Elemental Instant'],'Instant')
+    df['cardType'] = df['cardType'].replace(['Eaturecray', 'Scariest Creature You', 'Summon', 'Summon Wolf'],'Creature')
     df['subType'] = df['subType'].replace(['Igpay'],'Pig')
-    df = df[~df.cardType.str.contains("Token", na=False)] # fix code so this applies
+    df = df[~df.cardType.str.contains("Token", na=False)]
+    return df
 
 def convertSymbol(imgAlt):
     ''' 
@@ -25,6 +26,9 @@ def convertSymbol(imgAlt):
     return(imgAlt[0])
 
 def formatRules(rules):
+    '''
+    Clean up, reformat images, and merge list of rule <p> tags; return string of rules
+    '''
     for p in rules:
         # Convert rule symbols to text
         for image in p.findAll("img"):
@@ -34,21 +38,18 @@ def formatRules(rules):
         rules[index] = p.text.strip()  
     return("\n".join(rules))
 
-def getSuperType(cardType, superType, supertypes):
-    '''
-    Splits cardType string into card type and supertype; returns those values
-    '''
+def getSuperType(cardType, superType):
+    supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'World']
     if any(supertype in cardType for supertype in supertypes):
         typeSplit = cardType.split()
         superType = (superType + ' ' + typeSplit[0]).strip()
         cardType = ' '.join(typeSplit[1:])
-        
-    return(cardType, superType)
-
+        cardType, superType = getSuperType(cardType, superType)
+    return cardType, superType
 
 def splitSetAndRarity(setAndRarity):
     '''
-    Splits and returns set and rarity string
+    Splits and returns separate set and rarity strings
     '''
     srSplit = setAndRarity.split("(")
     cardSet = srSplit[0].strip()

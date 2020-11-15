@@ -19,12 +19,12 @@ if __name__ == '__main__':
 
     cardlist = []
 
-    for pageNum in range(10):
+    for pageNum in range(totalPages):
         page = r.get("https://gatherer.wizards.com/Pages/Search/Default.aspx?page={0}&name=+[%22%22]".format(pageNum))
         soup = bs(page.content, 'html.parser')
         cardItem = soup("tr", attrs={"class": "cardItem"})
 
-        print("Scraping page {0}".format(pageNum))
+        print("Scraping page {0}/{1}".format(pageNum + 1, totalPages))
 
         for card in cardItem:
             cardName = card.findNext("span", {"class": "cardTitle"}).text.strip()   
@@ -35,9 +35,7 @@ if __name__ == '__main__':
                 cardType, subType, typeNum = m.group(1).strip(), m.group(2), m.group(3)         
 
             # Divide type~supertype
-            supertypes = ['Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'Tribal', 'World']
-            cardType, superType = getSuperType(cardType, '', supertypes)
-            cardType, superType = getSuperType(cardType, superType, supertypes) # check again, can have 2 supertypes
+            cardType, superType = getSuperType(cardType, '')
 
             convertedMana = card.findNext("span", {"class": "convertedManaCost"}).text.strip()
 
@@ -60,7 +58,7 @@ if __name__ == '__main__':
             # If the card has other sets (reprints)...
             if (card.findChild("div", {"class": "otherSetSection"})):
                 otherSets = card.findChild("div", {"class": "otherSetSection"}).findAll('img', alt=True)
-                # append reprints to cardlist as their own row
+                # ...append reprints to cardlist as their own row
                 for extraSet in otherSets:
                     extraCardSet, extraRarity = splitSetAndRarity(extraSet['alt'])
                     cardlist.append([cardName, superType, cardType, subType, typeNum, manaCost, convertedMana, extraCardSet, extraRarity, rules])
@@ -70,7 +68,6 @@ if __name__ == '__main__':
 
 
     columnNames = ['cardName', 'superType', 'cardType', 'subType', 'typeNum', 'manaCost', 'convertedMana', 'cardSet', 'rarity', 'rules']
-    df = pd.DataFrame(cardlist, columns=columnNames)
-    cleanUp(df)
+    df = cleanUp(pd.DataFrame(cardlist, columns=columnNames))
 
     df.to_csv(path_or_buf='data/output.csv', index = False)
