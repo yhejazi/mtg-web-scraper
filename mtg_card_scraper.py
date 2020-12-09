@@ -34,7 +34,7 @@ if __name__ == '__main__':
             if m:
                 cardType, subType, typeNum = m.group(1).strip(), m.group(2), m.group(3)         
 
-            # Divide type~supertype
+            
             cardType, superType = getSuperType(cardType, '')
 
             convertedMana = card.findNext("span", {"class": "convertedManaCost"}).text.strip()
