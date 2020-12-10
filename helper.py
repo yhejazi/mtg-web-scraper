@@ -14,13 +14,24 @@ def convertSymbol(imgAlt):
     Coverts a card symbol image to its corresponding text -
     Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, 
     E = Energy
-    '''   
-    if (imgAlt == "Variable Colorless"):
-        return('X')
+    '''
+    print(imgAlt)
+    imgAltWords = imgAlt.strip().split()
+    if (len(imgAltWords) > 1):
+        if (imgAlt == "Variable Colorless"):
+            return('X')
+        if ("Phyrexian" in imgAlt): 
+            return('P')
+        if ("or" in imgAlt and len(imgAltWords) > 2): # Double mana
+            return(convertSymbol(imgAltWords[0]) + "|" + convertSymbol(imgAltWords[2]))
+        else: # Oh oh :(
+            raise Exception('Could not parse symbol:{}'.format(imgAlt))
     elif (imgAlt == "Blue"):
         return('U')
     elif (imgAlt == "Tap"):
         return('Tap')
+    elif(imgAlt == "Colorless"):
+        return('C')
     elif (imgAlt.isnumeric()): # number can be multiple digits
         return(imgAlt)
     return(imgAlt[0])
