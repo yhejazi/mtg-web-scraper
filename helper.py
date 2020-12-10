@@ -15,7 +15,6 @@ def convertSymbol(imgAlt):
     Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, 
     E = Energy
     '''
-    print(imgAlt)
     imgAltWords = imgAlt.strip().split()
     if (len(imgAltWords) > 1):
         if (imgAlt == "Variable Colorless"):
@@ -30,8 +29,6 @@ def convertSymbol(imgAlt):
         return('U')
     elif (imgAlt == "Tap"):
         return('Tap')
-    elif(imgAlt == "Colorless"):
-        return('C')
     elif (imgAlt.isnumeric()): # number can be multiple digits
         return(imgAlt)
     return(imgAlt[0])
