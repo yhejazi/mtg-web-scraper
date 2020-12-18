@@ -17,7 +17,7 @@ The Gatherer website is a database of every Magic: The Gathering card, including
 
 Supertypes (defined [here](https://mtg.fandom.com/wiki/Supertype) ): 'Basic', 'Host', 'Legendary', 'Ongoing', 'Snow', 'World'
 
-Mana Cost Key: Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, E = Energy
+Mana Cost Key: Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian = P, Tap = Tap, E = Energy
 
 Rarities: 'Common', 'Uncommon', 'Rare', 'Mythic Rare', 'Special', 'Promo'
 

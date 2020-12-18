@@ -7,13 +7,14 @@ def cleanUp(df):
     df['cardType'] = df['cardType'].replace(['Eaturecray', 'Scariest Creature You', 'Summon', 'Summon Wolf'],'Creature')
     df['subType'] = df['subType'].replace(['Igpay'],'Pig')
     df = df[~df.cardType.str.contains("Token", na=False)]
+    df = df[~df.manaCost.str.contains("H", na=False)] # remove cards with half mana cost
     return df
 
 def convertSymbol(imgAlt):
     ''' 
     Coverts a card symbol image to its corresponding text -
     Black = B, Blue = U, Red = R, Green = G, White = W, Variable Colorless = X, Colorless = C, Phyrexian Red = P, Tap = Tap, 
-    E = Energy
+    E = Energy, H = Half
     '''
     imgAltWords = imgAlt.strip().split()
     if (len(imgAltWords) > 1):
@@ -21,6 +22,8 @@ def convertSymbol(imgAlt):
             return('X')
         if ("Phyrexian" in imgAlt): 
             return('P')
+        if ("Half" in imgAlt): 
+            return('H')
         if ("or" in imgAlt and len(imgAltWords) > 2): # Double mana
             return(convertSymbol(imgAltWords[0]) + "|" + convertSymbol(imgAltWords[2]))
         else: # Oh oh :(
